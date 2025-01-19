@@ -1,0 +1,5 @@
+Flask==2.3.3    # for client_load_test.py only
+certifi
+pyOpenSSL
+brotli
+requests  # for client_load_test.py only
