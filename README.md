@@ -26,6 +26,7 @@ A robust reverse proxy server implementation in Python with load balancing, cach
   1. No unit-tests (i tested everything locally on all features, just didnt' get to writing tests)
   2. No sticky session feature implemented yet
   3. Only support Round-robin, but obviously can support other types of algos like weighted round-robin, Dynamic Load Balancing upon CPU/Mem, Least connection, etc.
+  4. Need a proper cert file ofc
 
 ### How would you scale this?
 
@@ -40,6 +41,7 @@ A robust reverse proxy server implementation in Python with load balancing, cach
 
 - Introduce additional authentication methods, such as JWT tokens.
 - Implement a whitelist/blacklist mechanism for access control.
+- Provision a proper cert.
 
 ## Key Features
 
@@ -65,16 +67,16 @@ python3 -m venv venv && source venv/bin/activate && pip install -r requirements.
 #### Example commands to spin up multiple web server backends
 
    ```bash
-   python3 backend_server.py 8000 --debug
-   python3 backend_server.py 8001 --debug
-   python3 backend_server.py 8002 --debug
-   python3 backend_server.py 8003 --debug
+   python3 backend_server/backend_server.py 8000 --debug
+   python3 backend_server/backend_server.py 8001 --debug
+   python3 backend_server/backend_server.py 8002 --debug
+   python3 backend_server/backend_server.py 8003 --debug
    ```
 
 #### Main command to spin up reverse proxy
 
    ```bash
-   python3 reverse_proxy.py --debug
+   python3 reverse_proxy/reverse_proxy.py --debug
    ```
 
 #### Example CURL commands to test the sample backend
