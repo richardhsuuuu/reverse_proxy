@@ -2,6 +2,41 @@
 
 A robust reverse proxy server implementation in Python with load balancing, caching, and SSL termination capabilities.
 
+## Main Questions and Answers
+
+### How can someone get started with your codebase?
+
+- Refer to the "Quick Start" section. You will need to set up a virtual environment (or use the provided one for convenience), run multiple backend servers (Flask) on different specified ports, and then execute the `reverse_proxy`.
+- You can test the setup using CURL or the load-testing tool I created.
+- If you pass in the debug param, you will notice in the response output, there's a "port" which indicate which host it's hitting from BE, and that will keep rotating due to the round-robhin Load Balancing I implemented.
+
+### What resources did you use to build your implementation?
+
+- I utilized a GenAI tool to code up more implementation after i decide on the high-level features i must implement
+- My approach involved looking at each aspect of reverse proxy functionality, selecting at least one key feature to implement, and gradually adding features and robustness. I concluded by developing a load testing tool to ensure everything functions correctly.
+- The most intriguing part was the health check and auto-discovery feature of the LoadBalancer, which I specifically separated. This feature allows hosts to dynamically join or leave, automatically updating the pool of available hosts in a separate health-checking thread.
+
+### Explain any design decisions you made, including limitations of the system
+
+- The system is quite robust. Key decisions include:
+  1. Implementing a Cache (LRU) to efficiently utilizing hosts.
+  2. Enabling auto-discovery of hosts and automated fail-over to different hosts, only failing requests when the retry count exceeds the internal limit.
+- I focused on implementing as many features and testing it live instead of writing unit-tests, i would add unit-tests if we need to bring this online of course.
+
+### How would you scale this?
+
+- I would introduce a dedicated database for comprehensive logging of requests and responses for tracing.
+- Enhance security by incorporating JWT tokens.
+- Implement sticky sessions if required.
+- Add a Rate-Limiter for better control.
+- Refactor out different functionalities within the same "reverse_proxy.py" - LRUCache, LoadBalancer,_generate_self_signed_cert, etc.
+- The LRUCache can likely be a dedicated RedisCache cluster
+
+### How would you make it more secure?
+
+- Introduce additional authentication methods, such as JWT tokens.
+- Implement a whitelist/blacklist mechanism for access control.
+
 ## Key Features
 
 - **Security**: Hides backend servers from direct internet access
@@ -26,16 +61,16 @@ python3 -m venv venv && source venv/bin/activate && pip install -r requirements.
 #### Example commands to spin up multiple web server backends
 
    ```bash
-   python3 /Users/richardhsu/Dev/reverse_proxy/backend_server.py 8000 --debug
-   python3 /Users/richardhsu/Dev/reverse_proxy/backend_server.py 8001 --debug
-   python3 /Users/richardhsu/Dev/reverse_proxy/backend_server.py 8002 --debug
-   python3 /Users/richardhsu/Dev/reverse_proxy/backend_server.py 8003 --debug
+   python3 backend_server.py 8000 --debug
+   python3 backend_server.py 8001 --debug
+   python3 backend_server.py 8002 --debug
+   python3 backend_server.py 8003 --debug
    ```
 
-#### Example command to spin up reverse proxy
+#### Main command to spin up reverse proxy
 
    ```bash
-   python3 /Users/richardhsu/Dev/reverse_proxy/reverse_proxy.py --debug
+   python3 reverse_proxy.py --debug
    ```
 
 #### Example CURL commands to test the sample backend
@@ -76,10 +111,6 @@ max_failures = 3      # Failures before marking as unhealthy
 ### Load Balancing
 
 max_retries = 2       # Maximum request retries
-
-## Detailed Explanation
-
-A feature-rich reverse proxy implementation in Python with SSL support, load balancing, caching, health checks, and compression.
 
 ## Core Features
 
