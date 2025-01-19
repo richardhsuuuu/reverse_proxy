@@ -20,8 +20,12 @@ A robust reverse proxy server implementation in Python with load balancing, cach
 
 - The system is quite robust. Key decisions include:
   1. Implementing a Cache (LRU) to efficiently utilizing hosts.
-  2. Enabling auto-discovery of hosts and automated fail-over to different hosts, only failing requests when the retry count exceeds the internal limit.
+  2. Enabling auto-discovery of hosts and automated fail-over to different hosts, only failing requests when the retry count exceeds the internal limit. This is what i'm prob most proud of, as this is a key differentiator of reverse proxies.
 - I focused on implementing as many features and testing it live instead of writing unit-tests, i would add unit-tests if we need to bring this online of course.
+- Limitation include:
+  1. No unit-tests (i tested everything locally on all features, just didnt' get to writing tests)
+  2. No sticky session feature implemented yet
+  3. Only support Round-robin, but obviously can support other types of algos like weighted round-robin, Dynamic Load Balancing upon CPU/Mem, Least connection, etc.
 
 ### How would you scale this?
 
