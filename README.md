@@ -36,7 +36,8 @@ A robust reverse proxy server implementation in Python with load balancing, cach
 - Implement sticky sessions, least connection if required.
 - Add a Rate-Limiter for better control.
 - The LRUCache can likely be a dedicated RedisCache cluster
-- If too much traffic come in, I would do 1) Vertical Scaling first - increase CPU/memory and implement least_connection load balance algo, then 2) Horizontal scaling - deploy this onto different hosts, and at the same time, start using Zookeeper to separate out host discovery and health checks to scale the host management process better. It is also possible to add more load-balancer in front (Amazon does this, where they maintain more load-balancer before the reverse-proxy, so by the time it reaches the reverse-proxy, the load is already managed). 
+- If too much traffic come in, I would do 1) Vertical Scaling first - increase CPU/memory and implement least_connection load balance algo, then 2) Horizontal scaling - deploy this onto different hosts, and at the same time, start using Zookeeper to separate out host discovery and health checks to scale the host management process better. It is also possible to add more load-balancer in front (Amazon does this, where they maintain more load-balancer before the reverse-proxy, so by the time it reaches the reverse-proxy, the load is already managed).
+- If the CPU becomes the bottleneck (due to SSL/TLS handshake), I would do crypto offload to a dedicated machine that has access to the private key, e.g. https://docs.aws.amazon.com/cloudhsm/latest/userguide/ssl-offload.html
 
 ### How would you make it more secure?
 
