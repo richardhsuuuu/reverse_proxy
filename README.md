@@ -27,15 +27,16 @@ A robust reverse proxy server implementation in Python with load balancing, cach
   2. No sticky session feature implemented yet
   3. Only support Round-robin, but obviously can support other types of algos like weighted round-robin, Dynamic Load Balancing upon CPU/Mem, Least connection, etc.
   4. Need a proper cert file ofc
+  5. Need more work to support horizontal-scaling of the same code, and need to support Zookeeper for host management.
 
 ### How would you scale this?
 
 - I would introduce a dedicated database for comprehensive logging of requests and responses for tracing.
 - Enhance security by incorporating JWT tokens.
-- Implement sticky sessions if required.
+- Implement sticky sessions, least connection if required.
 - Add a Rate-Limiter for better control.
-- Refactor out different functionalities within the same "reverse_proxy.py" - LRUCache, LoadBalancer,_generate_self_signed_cert, etc.
 - The LRUCache can likely be a dedicated RedisCache cluster
+- If too much traffic come in, I would do 1) Vertical Scaling first - increase CPU/memory and implement least_connection load balance algo, then 2) Horizontal scaling - deploy this onto different hosts, and at the same time, start using Zookeeper to separate out host discovery and health checks to scale the host management process better. It is also possible to add more load-balancer in front (Amazon does this, where they maintain more load-balancer before the reverse-proxy, so by the time it reaches the reverse-proxy, the load is already managed). 
 
 ### How would you make it more secure?
 
